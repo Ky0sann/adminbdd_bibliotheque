@@ -1,0 +1,14 @@
+import logging
+from config import LOG_LEVEL
+
+logging.basicConfig(
+    level=LOG_LEVEL,
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    handlers=[
+        logging.FileHandler("bibliotheque.log"),
+        logging.StreamHandler()
+    ]
+)
+
+def get_logger(name: str):
+    return logging.getLogger(name)
