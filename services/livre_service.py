@@ -2,9 +2,10 @@ from models.livre import Livre
 from repositories.livre_repo import LivreRepository
 
 class LivreService:
+    def __init__(self, engine):
+        self.repo = LivreRepository(engine)
 
-    @staticmethod
-    def ajouter_livre(isbn, titre, editeur, annee, exemplaires):
+    def ajouter_livre(self, isbn, titre, editeur, annee, exemplaires):
         livre = Livre(
             isbn=isbn,
             titre=titre,
@@ -12,24 +13,19 @@ class LivreService:
             annee=annee,
             exemplaires_dispo=exemplaires
         )
-        LivreRepository.create(livre)
+        self.repo.create(livre)
 
-    @staticmethod
-    def lister_livres():
-        return LivreRepository.get_all()
-
-    @staticmethod
-    def obtenir_livre_par_isbn(isbn):
-        return LivreRepository.get_by_isbn(isbn)
-
-    @staticmethod
-    def supprimer_livre(isbn):
-        LivreRepository.delete(isbn)
+    def lister_livres(self):
+        return self.repo.get_all()
     
-    @staticmethod
-    def mettre_a_jour_exemplaires(isbn: str, delta: int):
-        LivreRepository.update_exemplaires(isbn, delta)
+    def obtenir_livre_par_isbn(self,isbn):
+        return self.repo.get_by_isbn(isbn)
+
+    def supprimer_livre(self, isbn):
+        self.repo.delete(isbn)
     
-    @staticmethod
-    def modifier_livre(isbn: str, nouveau_titre: str, nouveau_editeur: str, nouvelle_annee: int, nouveaux_exemplaires: int):
-        LivreRepository.update_livre(isbn, nouveau_titre, nouveau_editeur, nouvelle_annee, nouveaux_exemplaires)
+    def mettre_a_jour_exemplaires(self,isbn: str, delta: int):
+        self.repo.update_exemplaires(isbn, delta)
+    
+    def modifier_livre(self,isbn: str, nouveau_titre: str, nouveau_editeur: str, nouvelle_annee: int, nouveaux_exemplaires: int):
+        self.repo.update_livre(isbn, nouveau_titre, nouveau_editeur, nouvelle_annee, nouveaux_exemplaires)

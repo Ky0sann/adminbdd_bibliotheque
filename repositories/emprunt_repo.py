@@ -1,4 +1,4 @@
-from database import SessionLocal
+from database import get_session
 from models.emprunt import Emprunt
 from logging_config import get_logger
 from datetime import date
@@ -6,10 +6,11 @@ from datetime import date
 logger = get_logger(__name__)
 
 class EmpruntRepository:
+    def __init__(self, engine):
+        self.engine = engine
 
-    @staticmethod
-    def create(emprunt: Emprunt):
-        session = SessionLocal()
+    def create(self, emprunt: Emprunt):
+        session = get_session(self.engine)
         try:
             session.add(emprunt)
             session.commit()
@@ -23,24 +24,20 @@ class EmpruntRepository:
         finally:
             session.close()
 
-    @staticmethod
-    def get_actifs():
-        session = SessionLocal()
+    def get_actifs(self):
+        session = get_session(self.engine)
         return session.query(Emprunt).filter(Emprunt.date_retour == None).all()
     
-    @staticmethod
-    def get_all():
-        session = SessionLocal()
+    def get_all(self):
+        session = get_session(self.engine)
         return session.query(Emprunt).all()
 
-    @staticmethod
-    def get_by_id(id_emprunt: int):
-        session = SessionLocal()
+    def get_by_id(self, id_emprunt: int):
+        session = get_session(self.engine)
         return session.get(Emprunt, id_emprunt)
 
-    @staticmethod
-    def update(emprunt: Emprunt):
-        session = SessionLocal()
+    def update(self, emprunt: Emprunt):
+        session = get_session(self.engine)
         try:
             session.merge(emprunt)
             session.commit()
@@ -52,9 +49,8 @@ class EmpruntRepository:
         finally:
             session.close()
     
-    @staticmethod
-    def supprimer_emprunt(id_emprunt: int):
-        session = SessionLocal()
+    def supprimer_emprunt(self, id_emprunt: int):
+        session = get_session(self.engine)
         try:
             emprunt = session.get(Emprunt, id_emprunt)
             if emprunt:
@@ -68,9 +64,8 @@ class EmpruntRepository:
         finally:
             session.close()
     
-    @staticmethod
-    def mettre_a_jour_emprunt(id_emprunt: int, date_emprunt : date, date_retour: date, amende: float):
-        session = SessionLocal()
+    def mettre_a_jour_emprunt(self, id_emprunt: int, date_emprunt : date, date_retour: date, amende: float):
+        session = get_session(self.engine)
         try:
             emprunt = session.get(Emprunt, id_emprunt)
             if emprunt:

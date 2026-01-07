@@ -1,14 +1,15 @@
-from database import SessionLocal
+from database import get_session
 from models.livre import Livre
 from logging_config import get_logger
 
 logger = get_logger(__name__)
 
 class LivreRepository:
+    def __init__(self, engine):
+        self.engine = engine
 
-    @staticmethod
-    def create(livre: Livre):
-        session = SessionLocal()
+    def create(self, livre: Livre):
+        session = get_session(self.engine)
         try:
             session.add(livre)
             session.commit()
@@ -20,19 +21,16 @@ class LivreRepository:
         finally:
             session.close()
 
-    @staticmethod
-    def get_all():
-        session = SessionLocal()
+    def get_all(self):
+        session = get_session(self.engine)
         return session.query(Livre).all()
     
-    @staticmethod
-    def get_by_isbn(isbn: str):
-        session = SessionLocal()
+    def get_by_isbn(self, isbn: str):
+        session = get_session(self.engine)
         return session.get(Livre, isbn)
 
-    @staticmethod
-    def update_exemplaires(isbn: str, delta: int):
-        session = SessionLocal()
+    def update_exemplaires(self, isbn: str, delta: int):
+        session = get_session(self.engine)
         try:
             livre = session.get(Livre, isbn)
             if livre:
@@ -48,9 +46,8 @@ class LivreRepository:
         finally:
             session.close()
 
-    @staticmethod
-    def delete(isbn: str):
-        session = SessionLocal()
+    def delete(self, isbn: str):
+        session = get_session(self.engine)
         try:
             livre = session.get(Livre, isbn)
             if livre:
@@ -64,9 +61,8 @@ class LivreRepository:
         finally:
             session.close()
             
-    @staticmethod
-    def update_livre(isbn: str, nouveau_titre: str, nouveau_editeur: str, nouvelle_annee: int, nouveaux_exemplaires: int):
-        session = SessionLocal()
+    def update_livre(self, isbn: str, nouveau_titre: str, nouveau_editeur: str, nouvelle_annee: int, nouveaux_exemplaires: int):
+        session = get_session(self.engine)
         try:
             livre = session.get(Livre, isbn)
             if livre:

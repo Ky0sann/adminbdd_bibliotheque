@@ -7,11 +7,12 @@ DUREE_MAX = 14
 AMENDE_PAR_JOUR = 0.50
 
 class EmpruntService:
+    def __init__(self, engine):
+        self.repo = EmpruntRepository(engine)
+        self.livre_repo = LivreRepository(engine)
 
-    @staticmethod
-    def emprunter_livre(id_etud: int, isbn: str):
-        livre = LivreRepository.get_by_isbn(isbn)
-
+    def emprunter_livre(self, id_etud: int, isbn: str):
+        livre = self.livre_repo.get_by_isbn(isbn)
         if not livre or livre.exemplaires_dispo <= 0:
             raise Exception("Livre indisponible")
 
@@ -21,12 +22,11 @@ class EmpruntService:
             date_emprunt=date.today()
         )
 
-        EmpruntRepository.create(emprunt)
-        LivreRepository.update_exemplaires(isbn, -1)
+        self.repo.create(emprunt)
+        self.livre_repo.update_exemplaires(isbn, -1)
 
-    @staticmethod
-    def retourner_livre(id_emprunt: int):
-        emprunt = EmpruntRepository.get_by_id(id_emprunt)
+    def retourner_livre(self, id_emprunt: int):
+        emprunt = self.repo.get_by_id(id_emprunt)
 
         if not emprunt or emprunt.date_retour:
             raise Exception("Emprunt invalide")
@@ -38,21 +38,17 @@ class EmpruntService:
         if retard > 0:
             emprunt.amende = retard * AMENDE_PAR_JOUR
 
-        EmpruntRepository.update(emprunt)
-        LivreRepository.update_exemplaires(emprunt.isbn, +1)
+        self.repo.update(emprunt)
+        self.livre_repo.update_exemplaires(emprunt.isbn, +1)
 
-    @staticmethod
-    def lister_emprunts_actifs():
-        return EmpruntRepository.get_actifs()
+    def lister_emprunts_actifs(self):
+        return self.repo.get_actifs()
     
-    @staticmethod
-    def lister_emprunts():
-        return EmpruntRepository.get_all()
+    def lister_emprunts(self):
+        return self.repo.get_all()
     
-    @staticmethod
-    def supprimer_emprunt(id_emprunt: int):
-        return EmpruntRepository.supprimer_emprunt(id_emprunt)
+    def supprimer_emprunt(self, id_emprunt: int):
+        return self.repo.supprimer_emprunt(id_emprunt)
     
-    @staticmethod 
-    def update_emprunt(id_emprunt: int, date_emprunt: date, date_retour: date, amende: float):
-        return EmpruntRepository.mettre_a_jour_emprunt(id_emprunt, date_emprunt, date_retour, amende)
+    def update_emprunt(self, id_emprunt: int, date_emprunt: date, date_retour: date, amende: float):
+        return self.repo.mettre_a_jour_emprunt(id_emprunt, date_emprunt, date_retour, amende)

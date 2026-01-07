@@ -1,14 +1,15 @@
-from database import SessionLocal
+from database import get_session
 from models.etudiant import Etudiant
 from logging_config import get_logger
 
 logger = get_logger(__name__)
 
 class EtudiantRepository:
+    def __init__(self, engine):
+        self.engine = engine
 
-    @staticmethod
-    def create(etudiant: Etudiant):
-        session = SessionLocal()
+    def create(self, etudiant: Etudiant):
+        session = get_session(self.engine)
         try:
             session.add(etudiant)
             session.commit()
@@ -20,14 +21,12 @@ class EtudiantRepository:
         finally:
             session.close()
 
-    @staticmethod
-    def get_all():
-        session = SessionLocal()
+    def get_all(self):
+        session = get_session(self.engine)
         return session.query(Etudiant).all()
 
-    @staticmethod
-    def delete(id_etud: int):
-        session = SessionLocal()
+    def delete(self, id_etud: int):
+        session = get_session(self.engine)
         try:
             etud = session.get(Etudiant, id_etud)
             if etud:
@@ -41,9 +40,8 @@ class EtudiantRepository:
         finally:
             session.close()
     
-    @staticmethod
-    def update(id_etud: int, nouveau_nom: str, nouveau_prenom: str, nouveau_email: str):
-        session = SessionLocal()
+    def update(self, id_etud: int, nouveau_nom: str, nouveau_prenom: str, nouveau_email: str):
+        session = get_session(self.engine)
         try:
             etud = session.get(Etudiant, id_etud)
             if etud:
