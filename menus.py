@@ -1,4 +1,4 @@
-def menu_admin():
+def menu_admin(): # Affiche le menu administrateur
     print("""
 --- MENU ADMIN ---
 1. Ajouter un étudiant
@@ -18,7 +18,7 @@ def menu_admin():
 0. Quitter
 """)
 
-def menu_bibliothecaire():
+def menu_bibliothecaire(): # Affiche le menu bibliothécaire
     print("""
 --- MENU BIBLIOTHÉCAIRE ---
 1. Ajouter un étudiant
@@ -38,7 +38,7 @@ def menu_bibliothecaire():
 0. Quitter
 """)
 
-def menu_etudiant():
+def menu_etudiant(): # Affiche le menu étudiant
     print("""
 --- MENU ÉTUDIANT ---
 2. Lister les étudiants

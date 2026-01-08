@@ -1,6 +1,9 @@
 from database import get_session
 from models.livre import Livre
 from logging_config import get_logger
+'''
+Repository pour gérer les livres dans la bibliothèque.
+'''
 
 logger = get_logger(__name__)
 

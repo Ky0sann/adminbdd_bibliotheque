@@ -1,6 +1,8 @@
 from models.livre import Livre
 from repositories.livre_repo import LivreRepository
-
+'''
+Service pour gérer les livres dans la bibliothèque.
+'''
 class LivreService:
     def __init__(self, engine):
         self.repo = LivreRepository(engine)

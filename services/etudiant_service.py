@@ -1,6 +1,8 @@
 from models.etudiant import Etudiant
 from repositories.etudiant_repo import EtudiantRepository
-
+'''
+Service pour gérer les étudiants dans la bibliothèque.
+'''
 class EtudiantService:
     def __init__(self, engine):
         self.repo = EtudiantRepository(engine)

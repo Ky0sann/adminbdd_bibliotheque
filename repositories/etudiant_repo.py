@@ -1,6 +1,9 @@
 from database import get_session
 from models.etudiant import Etudiant
 from logging_config import get_logger
+'''
+Repository pour gérer les étudiants dans la bibliothèque.
+'''
 
 logger = get_logger(__name__)
 
