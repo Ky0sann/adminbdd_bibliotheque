@@ -16,7 +16,8 @@ L'application utilise PostgreSQL comme base de données et psycopg2 + SQLAlchemy
 
 - Python 3.9+  
 - PostgreSQL  
-- Bibliothèques Python : `psycopg2` et `SQLAlchemy`  
+- Bibliothèques Python : `psycopg2` et `SQLAlchemy`
+- Une base de données opérationnelle (fichier `init.sql` disponible)
 
 ---
 
